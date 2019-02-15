@@ -18,8 +18,6 @@ sudo unzip \
 rsyslog \
 # -- utilities
 sed less vim file \
-# -- supervisor
-supervisor \
 # --- wine
 wine \
 # -- display
@@ -68,6 +66,8 @@ EXPOSE \
 666/tcp \
 28000/udp 
 
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-CMD ["/usr/bin/supervisord","-c","/etc/supervisor/conf.d/supervisord.conf"]
+USER ${SRVUSER}
+WORKDIR /home/${SRVUSER}
+
+CMD ["./start-server"]
 
