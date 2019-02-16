@@ -13,7 +13,7 @@ The server runs as the gameserv user
 
 
 ## Ports
-Exposed ports are `666`, `28000`, the standard TribesNext ports, these can be mapped to whatever you need when you run the container, see the run_container script for an example of how to execute this.
+Exposed ports are `666`, `28000`, the standard TribesNext ports, these can be mapped to whatever you need when you run the container, example below.
 
 
 ## Volumes
@@ -27,7 +27,7 @@ No volumes are used
 
 **Run a container**
 
-NB: the `--rm` arg will destroy the container when stopped.
+NB: the `--rm` arg will destroy the container when stopped; internal ports (666) can be mapped to available host ports (27999) per container
 ```
 docker run -d --rm \
 -p 27999:666/tcp \
@@ -42,13 +42,8 @@ tribesnext-server:latest
 
 
 ## Server Customization
-You can customize the server at build time by dropping the appropriate files at the appropriate locations in `_custom/`, these will be copied into the image in the appropriate places overwriting the default files if present.
+You can customize the server at build time by dropping the appropriate files at the appropriate locations in `_custom/`, these will be copied into the image into the install location within the container at build time.
 
-Currently supports
-* base
-* Classic
-
-If you want to add a new mod this will require a new `COPY` instruction added to the `Dockerfile` and an image rebuild, or raise an issue/pull request and we can look at updating the main repo.
 
 You can override the following defaults at build time
 ```
@@ -57,13 +52,16 @@ ARG SRVUID=1000
 ARG SRVDIR=/tmp/tribes2/
 ```
 
+You can also override the start-server script by added one to _custom this will overwrite the default at build time.
+
+
 
 ## Notes
 You can modify the installer script to update the source locations of the required files.
 
 `tribesnext-server-installer` may also be used in standalone mode to install TribesNext RC2a on the host system under wine but your mileage may vary.
 
-Testing has been minimal
+Testing has been minimal but it is running the NET247 server so you can try it out at any point.
 
 ## 2do
 * Thinner base OS

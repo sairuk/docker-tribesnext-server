@@ -5,6 +5,7 @@ MAINTAINER sairuk
 ARG SRVUSER=gameserv
 ARG SRVUID=1000
 ARG SRVDIR=/tmp/tribes2/
+ENV INSTDIR=/home/${SRVUSER}/.wine/drive_c/Dynamix/Tribes2/
 
 # UPDATE IMAGE
 RUN apt-get -y update && apt-get -y upgrade
@@ -46,14 +47,13 @@ RUN chmod +x ${SRVDIR}/tribesnext-server-installer
 RUN ${SRVDIR}/tribesnext-server-installer
 
 
-# SCRIPT - server
-COPY _scripts/start-server /home/${SRVUSER}/start-server
-RUN chmod +x /home/${SRVUSER}/start-server
+# SCRIPT - server (default)
+COPY _scripts/start-server ${INSTDIR}/start-server
+RUN chmod +x ${INSTDIR}/start-server
 
 
-# SCRIPT - custom
-COPY _custom/Classic/. /home/${SRVUSER}/.wine/drive_c/Dynamix/Tribes2/GameData/Classic/
-COPY _custom/base/. /home/${SRVUSER}/.wine/drive_c/Dynamix/Tribes2/GameData/base/
+# SCRIPT - custom (custom content / overrides)
+COPY _custom/. ${INSTDIR}
 
 
 # PERMISSIONS
@@ -67,7 +67,7 @@ EXPOSE \
 28000/udp 
 
 USER ${SRVUSER}
-WORKDIR /home/${SRVUSER}
+WORKDIR ${INSTDIR}
 
 CMD ["./start-server"]
 
